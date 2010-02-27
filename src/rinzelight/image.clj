@@ -2,13 +2,23 @@
   (:use [clojure.contrib.str-utils2 :only [split]]
         [rinzelight.buffered-image :only [write-buffered-image
                                           create-new-canvas-for-image]]
-        [rinzelight.format :only [get-normalized-format]]) 
+        [rinzelight.format :only [get-normalized-format]]
+        [rinzelight.display-image :only [display-fn]]) 
   (:import (java.awt Color)
 	   (java.awt.image BufferedImage)
 	   (javax.imageio ImageIO ImageReader)
-	   (java.io FileOutputStream)))
+	   (java.io FileOutputStream)
+           (javax.swing SwingUtilities)))
 
 (defstruct image :image :format :width :height)
+
+(defn display-image
+  "Display an image"
+  [img]
+  (let [runnable #(display-fn img)]
+    (if (SwingUtilities/isEventDispatchThread)
+      (.run runnable)
+      (SwingUtilities/invokeAndWait runnable))))
 
 (defmulti create-image
   "Creates a new image from BufferedImage or ImageReader" class)
