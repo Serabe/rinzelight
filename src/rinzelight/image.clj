@@ -53,9 +53,16 @@
   [img uri]
   (write-buffered-image (:image img) uri))
 
-; just handy
-(defn read-image
+(defmulti read-image
   "Reads an image from different resources. Look at ImageIO.createImageInputStream for more info"
+  class)
+
+(defmethod read-image String
+  [s]
+  (read-image (java.io.File. s)))
+
+; just handy
+(defmethod read-image :default
   [origin]
   (when origin
     (let [stream (ImageIO/createImageInputStream origin)]
