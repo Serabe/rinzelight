@@ -6,19 +6,18 @@
   "Just a function for displaying images"
   [img]
   (let [frame (JFrame. "Untitled Image")
+        picture (proxy [JComponent] []
+                  (paintComponent [g]
+                                  (.drawImage g (:image img) 0 0 nil)))
         size (Dimension. (:width img) (:height img))]
     (do
+      (doto picture
+        (.setPreferredSize size))
+      
       (doto frame
         (.setDefaultCloseOperation WindowConstants/DISPOSE_ON_CLOSE)
                                         ;(.setResizable false)
         (.setLayout (BorderLayout.))
-        (.setSize size)
-        (.pack))
-
-      (doto (.getGraphics (.getRootPane frame))
-        (.drawImage (:img img) 0 0 (:width img) (:height img) nil)
-        (.dispose))
-
-      (doto frame
+        (.add picture BorderLayout/CENTER)
         (.pack)
         (.show)))))
