@@ -12,13 +12,19 @@
 
 (defstruct image :image :format :width :height)
 
+(comment
+  (defn display-image
+    "Display an image"
+    [img]
+    (let [runnable #(display-fn img)]
+      (if (SwingUtilities/isEventDispatchThread)
+        (.run runnable)
+        (SwingUtilities/invokeAndWait runnable)))))
+
 (defn display-image
   "Display an image"
   [img]
-  (let [runnable #(display-fn img)]
-    (if (SwingUtilities/isEventDispatchThread)
-      (.run runnable)
-      (SwingUtilities/invokeAndWait runnable))))
+  (display-fn img))
 
 (defmulti create-image
   "Creates a new image from BufferedImage or ImageReader" class)
