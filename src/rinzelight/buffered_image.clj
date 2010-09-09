@@ -32,3 +32,10 @@
     (doto (.createGraphics buf-img)
       (.drawImage (:image img) 0 0 nil))
     buf-img))
+
+(defn get-pixels
+  "Returns pixels from pixel x,y to x+width,y+height"
+  [img x y w h]
+  (let [bi (:image img)
+        pxls (.. bi getRaster (getPixels x y w h (int-array (* w h))))]
+    (convert-to-pixel-seq pxls w h)))
