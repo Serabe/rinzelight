@@ -12,4 +12,4 @@
         h (:height img)
         nbi ] (create-empty-canvas w h))
   (doseq [y (range h)]
-    (let [row (get-pixels img 0 y (:width img) 1)])))
+    (let [row (get-pixels-int-array img 0 y (:width img) 1)])))

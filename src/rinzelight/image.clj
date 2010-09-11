@@ -21,6 +21,16 @@
         (.run runnable)
         (SwingUtilities/invokeAndWait runnable)))))
 
+(defn- assure-argb
+  [img]
+  (let [nbi (BufferedImage. (.getWidth  img)
+                            (.getHeight img)
+                            BufferedImage/TYPE_INT_ARGB)]
+    (doto (.createGraphics nbi)
+      (.drawImage img 0 0 nil)
+      (.dispose))
+    nbi))
+
 (defn display-image
   "Display an image"
   [img]
@@ -36,7 +46,7 @@
 (defmethod create-image ImageReader
   [reader]
   (let [frmt (get-normalized-format reader)
-	img (.read reader 0)
+	img (assure-argb (.read reader 0))
         width (.getWidth img)
         height (.getHeight img)]
     (struct image img frmt width height)))

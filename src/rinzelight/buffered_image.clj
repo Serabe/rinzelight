@@ -18,7 +18,7 @@
      (create-empty-canvas width height Color/WHITE))
 
   ([width height color]
-     (let [buf-img (BufferedImage. width height BufferedImage/TYPE_INT_RGB)]
+     (let [buf-img (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)]
        (doto (.createGraphics buf-img)
          (.setBackground color)
          (.clearRect 0 0 width height)
@@ -33,9 +33,12 @@
       (.drawImage (:image img) 0 0 nil))
     buf-img))
 
-(defn get-pixels
+(defn get-pixels-int-array
   "Returns pixels from pixel x,y to x+width,y+height"
-  [img x y w h]
-  (let [bi (:image img)
-        pxls (.. bi getRaster (getPixels x y w h (int-array (* w h))))]
-    (convert-to-pixel-seq pxls w h)))
+  ([img x y w h]
+     (let [size (* w h 4)
+           arr (int-array size)]
+       (.. (:image img) getRaster (getPixels x y w h arr))
+       arr))
+  ([img x y]
+     (.. (:image img) getRaster (getPixel x y (int-array 4)))))
