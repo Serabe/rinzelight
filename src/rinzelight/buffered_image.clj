@@ -42,3 +42,10 @@
        arr))
   ([img x y]
      (.. (:image img) getRaster (getPixel x y (int-array 4)))))
+
+(defn set-pixels-int-array
+  "Set pixels from pixel x,y to x+width,y+height."
+  ([img x y w h pixels]
+     (.. (:image img) getRaster (setPixels x y w h pixels)))
+  ([img x y pixel]
+     (.. (:image img) getRaster (setPixel x y pixel))))
