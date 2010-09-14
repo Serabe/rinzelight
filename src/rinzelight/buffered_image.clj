@@ -19,7 +19,7 @@
 
   ([width height color]
      (let [buf-img (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)]
-       (doto (.createGraphics buf-img)
+       (doto (.getGraphics buf-img)
          (.setBackground color)
          (.clearRect 0 0 width height)
          (.dispose))
@@ -29,7 +29,7 @@
   "Creates a new canvas an copies the image to it"
   [img]
   (let [buf-img (create-empty-canvas (:width img) (:height img))]
-    (doto (.createGraphics buf-img)
+    (doto (.getGraphics buf-img)
       (.drawImage (:image img) 0 0 nil))
     buf-img))
 
