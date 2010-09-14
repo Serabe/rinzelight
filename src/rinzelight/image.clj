@@ -41,7 +41,7 @@
 
 (defmethod create-image BufferedImage
   [buf-img]
-  (struct image buf-img "JPEG")) ; TODO: Check the format.
+  (struct image (assure-argb buf-img) "JPEG" (.getWidth buf-img) (.getHeight buf-img))) ; TODO: Check the sizes.
 
 (defmethod create-image ImageReader
   [reader]
