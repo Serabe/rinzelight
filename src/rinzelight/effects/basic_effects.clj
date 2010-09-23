@@ -13,7 +13,26 @@
   [img]
   (assoc img :image (create-empty-canvas (:width img) (:height img))))
 
-; TODO  finish
+(defn map-pixel-location
+  "Calls f for each pixel location and returns another location.
+   f must acccept two parameters [x, y] and return another vector with the new coordinates."
+  [f img]
+  (let [w (:width img)
+        h (:height img)
+        row-length (* w 4)
+        ni (get-image-for-effect img)]
+    (doseq [y (range h)]
+      (let [row (get-pixels-int-array img 0 y w 1)]
+        (doseq [x (range w)]
+          (let [ini (* x 4)
+                arr (int-array 4)
+                nl  (f [x y])]
+            (do
+              (System/arraycopy row ini arr 0 4)
+              (set-pixels-int-array ni (nl 0) (nl 1) arr))))))
+    ni))
+
+; TODO improve performance.
 (defn map-image
   "Calls f for each pixel."
   [f img]
