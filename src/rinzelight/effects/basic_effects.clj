@@ -10,8 +10,13 @@
 
 (defn get-image-for-effect
   "Retrieves a new image like img but prepared for writing its pixels"
-  [img]
-  (assoc img :image (create-empty-canvas (:width img) (:height img))))
+  ([img]
+     (assoc img :image (create-empty-canvas (:width img) (:height img))))
+  ([img width height]
+     (assoc img
+       :image  (create-empty-canvas width height)
+       :width  width
+       :height height)))
 
 (defn map-pixel-location
   "Calls f for each pixel location and returns another location.
