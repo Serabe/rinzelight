@@ -1,7 +1,8 @@
 (ns rinzelight.pixel-test
   (:use midje.sweet)
   (:use clojure.test)
-  (:use rinzelight.pixel))
+  (:use rinzelight.pixel
+        rinzelight.constants))
 
 
 (deftest create-pixel-facts
@@ -11,7 +12,7 @@
           (:red   p) => v
           (:green p) => v
           (:blue  p) => v
-          (:alpha p) => rl-opaque-opacity))
+          (:alpha p) => (opaque-opacity)))
 
   (let [r 30
         g 60
@@ -21,7 +22,7 @@
           (:red   p) => r
           (:green p) => g
           (:blue  p) => b
-          (:alpha p) => rl-opaque-opacity))
+          (:alpha p) => (opaque-opacity)))
 
   (let [r 30
         g 60
@@ -56,29 +57,29 @@
   (fact "Less than zero, returns zero"
         (pixel-round-to-quantum -5) => 0)
 
-  (doseq [v (range (inc rl-quantum-range))]
+  (doseq [v (range (inc (quantum-range)))]
     (let [s (str "If " v " is passed, it returns " v ".")])
     (fact ;s ; But if s is used, somehow it fails...
      (pixel-round-to-quantum v) => v))
   
   (fact "Greater than rl-quantum-range, returns rl-quantum-range"
-        (pixel-round-to-quantum (inc rl-quantum-range)) => rl-quantum-range
-        (pixel-round-to-quantum (* 2 rl-quantum-range)) => rl-quantum-range))
+        (pixel-round-to-quantum (inc (quantum-range))) => (quantum-range)
+        (pixel-round-to-quantum (* 2 (quantum-range))) => (quantum-range))
 
 
 
-(deftest invert-sample-value-facts
-  (doseq [v (range (inc rl-quantum-range))]
+  (deftest invert-sample-value-facts
+    (doseq [v (range (inc (quantum-range)))]
     
-    (let [n (- rl-quantum-range v)]
-      (fact "When passed a value between 0 and rl-quantum-range, it returns rl-quantum-range - value" ; Variable string when 0.5 is out
-            (invert-sample-value v) => n)))
+      (let [n (- (quantum-range) v)]
+        (fact "When passed a value between 0 and rl-quantum-range, it returns rl-quantum-range - value" ; Variable string when 0.5 is out
+              (invert-sample-value v) => n)))
 
-  (fact "When passed a value below 0, rl-quantum-range is returned."
-        (invert-sample-value -35) => rl-quantum-range)
+    (fact "When passed a value below 0, rl-quantum-range is returned."
+          (invert-sample-value -35) => (quantum-range))
 
-  (fact "When passed a value above rl-quantum-range, 0 is returned"
-        (invert-sample-value (inc rl-quantum-range)) => 0))
+    (fact "When passed a value above rl-quantum-range, 0 is returned"
+          (invert-sample-value (inc (quantum-range))) => 0)))
 
 (deftest invert-pixel-facts
   (let [r 30
