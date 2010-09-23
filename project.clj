@@ -1,4 +1,4 @@
-(defproject org.clojars.serabe/rinzelight "0.0.1"
+(defproject org.clojars.serabe/rinzelight "0.0.22"
   :description "Magick-like image proccessing for Clojure"
   :dependencies [[org.clojure/clojure "1.2.0"]
                  [org.clojure/clojure-contrib "1.2.0"]]
