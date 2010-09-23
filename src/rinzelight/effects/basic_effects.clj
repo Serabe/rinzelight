@@ -1,5 +1,7 @@
 (ns rinzelight.effects.basic-effects
-  (:use [rinzelight.buffered-image :only [get-pixels-int-array
+  (:use [rinzelight.buffered-image :only [get-pixel
+                                          get-pixels-int-array
+                                          set-pixel
                                           set-pixels-int-array
                                           create-empty-canvas]]
         [rinzelight.pixel :only [create-pixel
@@ -46,19 +48,8 @@
         row-length (* w 4)
         ni (get-image-for-effect img)]
     (doseq [y (range h)]
-      (let [row (get-pixels-int-array img 0 y w 1)
-            nrw (int-array row-length)]
-        (doseq [x (range w)]
-          (let [ini (* x 4)
-                pixel (create-pixel (aget row ini)
-                                    (aget row (+ ini 1))
-                                    (aget row (+ ini 2))
-                                    (- 255 (aget row (+ ini 3))))
-                npa (pixel-to-int-array (f pixel))]
-            (doto nrw
-              (aset ini (pixel-round-to-quantum (aget npa 0)))
-              (aset (+ ini 1) (pixel-round-to-quantum (aget npa 1)))
-              (aset (+ ini 2) (pixel-round-to-quantum (aget npa 2)))
-              (aset (+ ini 3) (pixel-round-to-quantum (aget npa 3))))))
-        (set-pixels-int-array ni 0 y w 1 nrw)))
+      (doseq [x (range w)]
+        (let [pixel (get-pixel img x y)
+              npa (f pixel)]
+          (set-pixel ni x y npa))))
     ni))

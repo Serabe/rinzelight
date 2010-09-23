@@ -1,6 +1,8 @@
 (ns rinzelight.buffered-image
   (:use [clojure.contrib.str-utils2 :only [split]]
-        [rinzelight.format :only [get-normalized-format]])  
+        [rinzelight.format :only [get-normalized-format]]
+        [rinzelight.pixel  :only [create-pixel
+                                  pixel-to-int-array]])  
   (:import (java.awt Color)
           (java.awt.image BufferedImage)
           (java.io FileOutputStream)
@@ -43,9 +45,23 @@
   ([img x y]
      (.. (:image img) getRaster (getPixel x y (int-array 4)))))
 
+(defn get-pixel
+  "Returns the pixel (x,y) in img as a pixel struct."
+  [img x y]
+  (let [a (get-pixels-int-array img x y)]
+    (create-pixel (aget a 0)
+                  (aget a 1)
+                  (aget a 2)
+                  (- 255 (aget a 3)))))
+
 (defn set-pixels-int-array
   "Set pixels from pixel x,y to x+width,y+height."
   ([img x y w h pixels]
      (.. (:image img) getRaster (setPixels x y w h pixels)))
   ([img x y pixel]
      (.. (:image img) getRaster (setPixel x y pixel))))
+
+(defn set-pixel
+  "Given a pixel (in a pixel struct), writes it in (x,y) in img."
+  [img x y p]
+  (set-pixels-int-array img x y (pixel-to-int-array p)))
