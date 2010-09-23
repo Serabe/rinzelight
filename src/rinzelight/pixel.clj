@@ -34,3 +34,15 @@
   "Assures that a value is between 0 and rl-quantum-value"
   [value]
   (max 0 (min rl-quantum-range value)))
+
+(defn invert-sample-value
+  [val]
+  (- rl-quantum-range (pixel-round-to-quantum val)))
+
+(defn invert-pixel
+  "Returns an inverted pixel."
+  [p]
+  (create-pixel (invert-sample-value (:red   p))
+                (invert-sample-value (:green p))
+                (invert-sample-value (:blue  p))
+                (:alpha p)))

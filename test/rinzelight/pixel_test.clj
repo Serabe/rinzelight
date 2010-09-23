@@ -3,6 +3,7 @@
   (:use clojure.test)
   (:use rinzelight.pixel))
 
+
 (deftest create-pixel-facts
   (let [v 35
         p (create-pixel v)]
@@ -63,3 +64,34 @@
   (fact "Greater than rl-quantum-range, returns rl-quantum-range"
         (pixel-round-to-quantum (inc rl-quantum-range)) => rl-quantum-range
         (pixel-round-to-quantum (* 2 rl-quantum-range)) => rl-quantum-range))
+
+
+
+(deftest invert-sample-value-facts
+  (doseq [v (range (inc rl-quantum-range))]
+    
+    (let [n (- rl-quantum-range v)]
+      (fact "When passed a value between 0 and rl-quantum-range, it returns rl-quantum-range - value" ; Variable string when 0.5 is out
+            (invert-sample-value v) => n)))
+
+  (fact "When passed a value below 0, rl-quantum-range is returned."
+        (invert-sample-value -35) => rl-quantum-range)
+
+  (fact "When passed a value above rl-quantum-range, 0 is returned"
+        (invert-sample-value (inc rl-quantum-range)) => 0))
+
+(deftest invert-pixel-facts
+  (let [r 30
+        g 60
+        b 90
+        a 99
+        p (create-pixel r g b a)
+        i (invert-pixel p)]
+    (fact "It returns the inverted red sample"
+          (:red   i) => (invert-sample-value r))
+    (fact "It returns the inverted green sample"
+          (:green i) => (invert-sample-value g))
+    (fact "It returns the inverted blue sample"
+          (:blue  i) => (invert-sample-value b))
+    (fact "It returns the SAME alpha value"
+          (:alpha i) => a)))
