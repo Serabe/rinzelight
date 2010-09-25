@@ -40,15 +40,15 @@
   ([img x y w h]
      (let [size (* w h 4)
            arr (int-array size)]
-       (.. (:image img) getRaster (getPixels x y w h arr))
+       (.. ^BufferedImage (:image img) getRaster (getPixels x y w h arr))
        arr))
   ([img x y]
-     (.. (:image img) getRaster (getPixel x y (int-array 4)))))
+     (.. ^BufferedImage (:image img) getRaster (getPixel x y (int-array 4)))))
 
 (defn get-pixel
   "Returns the pixel (x,y) in img as a pixel struct."
   [img x y]
-  (let [a (get-pixels-int-array img x y)]
+  (let [a ^ints (get-pixels-int-array img x y)]
     (create-pixel (aget a 0)
                   (aget a 1)
                   (aget a 2)
@@ -57,9 +57,9 @@
 (defn set-pixels-int-array
   "Set pixels from pixel x,y to x+width,y+height."
   ([img x y w h pixels]
-     (.. (:image img) getRaster (setPixels x y w h pixels)))
+     (.. ^BufferedImage (:image img) getRaster (setPixels x y w h pixels)))
   ([img x y pixel]
-     (.. (:image img) getRaster (setPixel x y pixel))))
+     (.. ^BufferedImage (:image img) getRaster (setPixel x y pixel))))
 
 (defn set-pixel
   "Given a pixel (in a pixel struct), writes it in (x,y) in img."

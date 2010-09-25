@@ -4,6 +4,9 @@
                                           set-pixel
                                           set-pixels-int-array
                                           create-empty-canvas]]
+        [rinzelight.effects.lookup-tables :only
+         [apply-lookup-table
+          create-lookup-table-from-pixel-function]]
         [rinzelight.pixel :only [create-pixel
                                  pixel-to-int-array
                                  pixel-round-to-quantum]])
@@ -20,6 +23,7 @@
        :width  width
        :height height)))
 
+; TODO add new size parameter
 (defn map-pixel-location
   "Calls f for each pixel location and returns another location.
    f must acccept two parameters [x, y] and return another vector with the new coordinates."
@@ -36,20 +40,11 @@
                 nl  (f [x y])]
             (do
               (System/arraycopy row ini arr 0 4)
-              (set-pixels-int-array ni (nl 0) (nl 1) arr))))))
-    ni))
+              (set-pixels-int-array ni (nl 0) (nl 1) arr))))))))
 
-; TODO improve performance.
+; TODO lookup tables are not valid for this method.
 (defn map-image
   "Calls f for each pixel."
   [f img]
-  (let [w   (:width img)
-        h   (:height img)
-        row-length (* w 4)
-        ni (get-image-for-effect img)]
-    (doseq [y (range h)]
-      (doseq [x (range w)]
-        (let [pixel (get-pixel img x y)
-              npa (f pixel)]
-          (set-pixel ni x y npa))))
-    ni))
+  (apply-lookup-table img
+                      (create-lookup-table-from-pixel-function f)))
