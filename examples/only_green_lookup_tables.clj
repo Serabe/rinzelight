@@ -1,4 +1,4 @@
-(ns examples.only-green
+(ns examples.only-green-lookup-tables
   (:use criterium.core
         rinzelight.image
         rinzelight.effects.lookup-tables))
