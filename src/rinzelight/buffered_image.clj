@@ -8,6 +8,76 @@
           (java.io FileOutputStream)
           (javax.imageio ImageIO)))
 
+(defmacro create-sample-get
+  [sample-name sample-band]
+  (let [fn-name (symbol (str "get-" sample-name "-sample-int"))
+        doc-str (str "Returns " sample-name " sample from pixel x,y")]
+    `(do
+       (defn
+         ~fn-name
+         [img# x# y#]
+         (.. ^BufferedImage (:image img#) getRaster (getSample x# y# ~sample-band)))
+       (alter-meta! #'~fn-name
+                    #(assoc %
+                       :doc ~doc-str
+                       :arglists '([img x y]))))))
+
+(defmacro create-samples-get
+  [sample-name sample-band]
+  (let [fn-name (symbol (str "get-" sample-name "-samples-int-array"))
+        doc-str (str "Returns " sample-name " samples from pixel x,y to pixel x+width,y+height")]
+    `(do
+       (defn
+         ~fn-name
+         ([img# x# y# w# h#] (~fn-name img# x# y# w# h# (int-array (* w# h#))))
+         ([img# x# y# w# h# ^ints arr#]
+             (.. ^BufferedImage (:image img#) getRaster (getSamples x# y# w# h# ~sample-band arr#))))
+       (alter-meta! #'~fn-name
+                    #(assoc %
+                       :doc ~doc-str
+                       :arglists '([img x y width height] [img x y width height array]))))))
+
+(defmacro create-sample-set
+  [sample-name sample-band]
+  (let [fn-name (symbol (str "set-" sample-name "-sample-int"))
+        doc-str (str "Sets " sample-name " sample to pixel x,y")]
+    `(do
+       (defn
+         ~fn-name
+         [img# x# y# v#]
+         (.. ^BufferedImage (:image img#) getRaster (setSample x# y# ~sample-band v#)))
+       (alter-meta! #'~fn-name
+                    #(assoc %
+                       :doc ~doc-str
+                       :arglists '([img x y v]))))))
+
+(defmacro create-samples-set
+  [sample-name sample-band]
+  (let [fn-name (symbol (str "set-" sample-name "-samples-int-array"))
+        doc-str (str "Sets " sample-name " samples from pixel x,y to pixel x+width,y+height")]
+    `(do
+       (defn
+         ~fn-name
+         [img# x# y# w# h# ^ints v#]
+         (.. ^BufferedImage (:image img#) getRaster (setSamples x# y# w# h# ~sample-band v#)))
+       (alter-meta! #'~fn-name
+                    #(assoc %
+                       :doc ~doc-str
+                       :arglists '([img x y w h v]))))))
+
+(defmacro create-sample-accessors
+  [sample-name sample-band]
+  `(do
+     (create-sample-get  ~sample-name ~sample-band)
+     (create-samples-get ~sample-name ~sample-band)
+     (create-sample-set  ~sample-name ~sample-band)
+     (create-samples-set ~sample-name ~sample-band)))
+
+(create-sample-accessors red   0)
+(create-sample-accessors green 1)
+(create-sample-accessors blue  2)
+(create-sample-accessors alpha 3)
+
 (defn write-buffered-image
   [buf-img uri]
   "Writes a BufferedImage to a File whose path is uri"
