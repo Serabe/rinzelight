@@ -34,9 +34,23 @@ code:
 
     (map-image invert-pixel img)
 
+## map-pixel-location
+
+__map-pixel-location__ receives either two or four parameters. If
+final image has the same width and height as the original, only img
+and function is needed. Otherwise, new width and height are
+needed. The function receives a two-length vector representing current
+pixel location and must return a two-length vector representing new
+location for current pixel.
+
+You can use functions in *rinzelight.effects.helper-functions* for
+some basic effects, like rotating left and right. See examples dir for
+more of these functions.
+
+
 ## apply-lookup-table
 
-__apply-lookup-table accepts two parameters: an image and a lookup
+__apply-lookup-table__ accepts two parameters: an image and a lookup
 table. Then, it applies the lookup table to the image and return a new
 one.
 
