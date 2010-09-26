@@ -6,12 +6,14 @@
 (defn only-green
   [p]
   (assoc p
-         :red  0
-         :blue 0))
+    :red  0
+    :blue 0))
 
-(def img (read-image "samples/clojure.png"))
+(def img (read-image "samples/northern-lights.jpg"))
 
 (with-progress-reporting
   (bench
-   (map-image only-green img)
+   (def ni (map-image only-green img))
    :verbose))
+
+(display-image ni)
