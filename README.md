@@ -18,8 +18,8 @@ RinzeLight is an image processing library inspired and based on RMagick4J.
 
 # Modifying an image
 
-Currently, there are only two methods to modify an image:
-__map-image__ and __map-pixel-location__.
+Currently, there are only three methods to modify an image:
+__map-image__,  __map-pixel-location__ and __apply-lookup-table__.
 
 ## map-image
 
@@ -33,3 +33,41 @@ code:
     (use 'rinzelight.pixel)
 
     (map-image invert-pixel img)
+
+## apply-lookup-table
+
+__apply-lookup-table accepts two parameters: an image and a lookup
+table. Then, it applies the lookup table to the image and return a new
+one.
+
+There are a few one-dimensional lookup tables:
+
+  * zero: Returns zero for any value.
+  * straight: Returns the same value it receives.
+  * invert: Returns quantum-range - x, being x the received value.
+  * brighten: It is used to brighten the image.
+  * better-brighten: It produces a better brightened image.
+  * posterize: Used for posterizing an image.
+
+For creating a multidimensional lookup-table, see:
+
+    (doc multisample-lookup-table)
+
+It is really easy.
+
+You can create a lookup table from a pixel function, but take into
+account that result may differ from what you expected.
+
+For applying a lookup-table, just use __apply-lookup-table__ like
+this:
+
+    (def img (read-image "samples-northern-lights")    
+
+    (def only-green (multisample-lookup-table zero
+                                              zero
+                                              straight))
+
+    (apply-lookup-table img only-green)
+
+If a pixel function can be expressed as a lookup table, use this
+method since it is way faster than map-image.
