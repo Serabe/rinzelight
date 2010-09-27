@@ -47,6 +47,13 @@ You can use functions in *rinzelight.effects.helper-functions* for
 some basic effects, like rotating left and right. See examples dir for
 more of these functions.
 
+    (def img (read-image "samples/northern-lights.clj"))
+
+    (def new-size (vertical-flip-new-size img))
+
+    (map-pixel-location (vertical-flip img) img
+                        (new-size 0)
+                        (new-size 1))
 
 ## apply-lookup-table
 
