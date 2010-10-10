@@ -56,8 +56,8 @@
 
 (defn apply-lookup-table
   "Applies lookup table t to img."
-  [img t]
+  [img t & rendering-hints]
   (assoc img :image
          (.filter (LookupOp. (ShortLookupTable. 0 t) nil)
                   (:image img)
-                  nil))) ; TODO Add RenderingHints
+                  (apply merge rendering-hints))))
