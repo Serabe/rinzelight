@@ -2,6 +2,11 @@
   (:use [clojure.contrib.def :only [defmacro-]])
   (:import (java.awt RenderingHints)))
 
+(defn create-rendering-hint
+  "Given a few rendering hints, it retrieves a RenderingHints object"
+  [& values]
+  (RenderingHints. (apply merge values)))
+
 (defn key-to-value
   [name]
   (cond

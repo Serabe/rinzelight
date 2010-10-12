@@ -1,6 +1,7 @@
 (ns rinzelight.effects.lookup-tables
   (:use rinzelight.constants
-        [rinzelight.pixel :only [create-pixel]])
+        [rinzelight.pixel :only [create-pixel]]
+        [rinzelight.rendering-hints :only [create-rendering-hint]])
   (:import (java.awt.image LookupOp ShortLookupTable)))
 
 (defn lookup-table-from
@@ -58,6 +59,7 @@
   "Applies lookup table t to img."
   [img t & rendering-hints]
   (assoc img :image
-         (.filter (LookupOp. (ShortLookupTable. 0 t) nil)
+         (.filter (LookupOp. (ShortLookupTable. 0 t)
+                             (apply create-rendering-hint rendering-hints))
                   (:image img)
-                  (apply merge rendering-hints))))
+                  nil)))
