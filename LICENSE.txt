@@ -1,5 +1,6 @@
 samples/clojure.png has been taken from clojure.org
-samples/northern-lights.jpg has been taken from http://www.flickr.com/photos/nickrussill/146743083/
+samples/northern-lights.jpg has been taken from
+http://www.flickr.com/photos/nickrussill/146743083/. Full credit for www.nickrussill-photography.co.uk
 
 Both copyrights are held by their owners.
 
