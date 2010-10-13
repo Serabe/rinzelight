@@ -1,4 +1,4 @@
-(ns rinzelight.effects.affine-transformations
+(ns rinzelight.effects.affine-transforms
   (:use [rinzelight.effects.basic-effects
          :only [get-image-for-effect]]
         [rinzelight.rendering-hints
@@ -11,6 +11,16 @@
  ^{:doc "If the transformation is either a scale, a shear or a combination of both
 it is convenient to set this to true in order to resize the new image."}
  *is-a-resize-safe-transform* false)
+
+(defn concat-transforms
+  "Concatenates all transformations."
+  [& transforms]
+  (reduce (fn [a b] (doto a (.concatenate b))) (AffineTransform.) transforms))
+
+(defn preconcat-transforms
+  "Preconcatenates all transformations"
+  [& transforms]
+  (reduce (fn [a b] (doto a (.preConcatenate b))) (AffineTransform.) transforms))
 
 (defn new-size-after-transform
   "Works out the size of the resulting image of transforming img with t"
