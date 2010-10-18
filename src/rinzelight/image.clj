@@ -31,6 +31,12 @@
       (.dispose))
     nbi))
 
+(defn clone-image
+  "Retrieves a new image structure but with a new image cloned from original."
+  [img]
+  (assoc img
+    :image (create-new-canvas-for-image img)))
+
 (defn display-image
   "Display an image"
   [img]

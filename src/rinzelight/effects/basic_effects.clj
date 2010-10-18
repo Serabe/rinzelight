@@ -33,7 +33,6 @@
        :width  width
        :height height)))
 
-; TODO add new size parameter
 (defn map-pixel-location
   "Calls f for each pixel location and returns another location.
    f must acccept two parameters [x, y] and return another vector with the new coordinates."
@@ -53,13 +52,6 @@
                  (System/arraycopy row ini arr 0 4)
                  (set-pixels-int-array ni (nl 0) (nl 1) arr))))))
        ni)))
-
-; TODO lookup tables are not valid for this method.
-(comment (defn map-image
-           "Calls f for each pixel."
-           [f img]
-           (apply-lookup-table img
-                               (create-lookup-table-from-pixel-function f))))
 
 (defn map-image
   "Calls f for each pixel."
