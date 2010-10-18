@@ -2,7 +2,7 @@
 classes/
 lib/
 pom.xml
-rinzelight.jar
+rinzelight*.jar
 *#*#*
 
 examples/out
