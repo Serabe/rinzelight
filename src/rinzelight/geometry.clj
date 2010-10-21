@@ -15,7 +15,7 @@ Actually, any function with two parameters returning a two-long int vector would
                            (:width ~'src)
                            (:height ~'src)))
      ([~dst-width ~dst-height ~src-width ~src-height]
-         ~@body)))
+        ~@body)))
 
 (defmacro compose-geometries
   "Returns a geometry named name whose x coordinate is calculated by geo-x and y coordinate by geo-y"
