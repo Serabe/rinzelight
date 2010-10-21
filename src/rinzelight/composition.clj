@@ -54,6 +54,11 @@ Body executes inside a doto bounded to a Graphics2D object."
          (.setComposite orig-comp#))
        ni#)))
 
+(defn composite?
+  [o]
+  (contains? (ancestors (class o))
+             java.awt.Composite))
+
 (defn composite
   "Composes src over dst at pixel x,y using comp Composite.
 If x,y aren't given, 0,0 is assumed.
@@ -61,7 +66,10 @@ If comp is not given, src-over is assumed.
 If instead of two coordinates, one is supplied, it is assumed it is a geometry.
 Returns a new image."
   ([dst src] (composite src dst (src-over) 0 0))
-  ([dst src comp] (composite src dst comp 0 0))
+  ([dst src comp-or-geom]
+     (if (composite? comp-or-geom)
+       (composite dst src comp-or-geom 0 0)
+       (composite dst src (src-over) comp-or-geom)))
   ([dst src comp geom]
      (let [coord (geom dst src)]
        (composite dst src comp (coord 0) (coord 1))))
