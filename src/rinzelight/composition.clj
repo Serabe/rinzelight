@@ -1,7 +1,8 @@
 (ns rinzelight.composition
-  (:use [[rinzelight.image
-          :only [clone-image]]])
-  (:import (java.awt AlphaComposite)))
+  (:use [rinzelight.image
+         :only [clone-image]])
+  (:import (java.awt AlphaComposite))
+  )
 
 (defmacro porter-duff-rule
   "Defines a composite. A composite accepts an optional parameter. If given, it is the factor to multiply the alpha of the source."
@@ -55,11 +56,15 @@ Body executes inside a doto bounded to a Graphics2D object."
 
 (defn composite
   "Composes src over dst at pixel x,y using comp Composite.
-If x,y aren't given, 0,0 is asumed.
-If comp is not given, src-over is asumed.
+If x,y aren't given, 0,0 is assumed.
+If comp is not given, src-over is assumed.
+If instead of two coordinates, one is supplied, it is assumed it is a geometry.
 Returns a new image."
-  ([src dst] (composite src dst (src-over) 0 0))
-  ([src dst comp] (composite src dst comp 0 0))
-  ([src dst comp x y]
+  ([dst src] (composite src dst (src-over) 0 0))
+  ([dst src comp] (composite src dst comp 0 0))
+  ([dst src comp geom]
+     (let [coord (geom dst src)]
+       (composite dst src comp (coord 0) (coord 1))))
+  ([dst src comp x y]
      (with-composite dst comp
        (.drawImage (:image src) nil x y))))
