@@ -1,5 +1,4 @@
 (ns rinzelight.format
-  (:use [clojure.contrib.str-utils2 :only [split]])
   (:import (javax.imageio ImageReader)))
 
 (defn normalize-format
@@ -12,7 +11,8 @@
 
 (defmethod get-format String
   [#^String filename]
-  (last (split filename #"\.")))
+  (let [idx (inc (.lastIndexOf filename (int \.)))]
+    (.substring filename idx)))
 
 (defmethod get-format ImageReader
   [#^ImageReader reader]

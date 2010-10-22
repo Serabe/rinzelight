@@ -1,6 +1,5 @@
 (ns rinzelight.buffered-image
-  (:use [clojure.contrib.str-utils2 :only [split]]
-        [rinzelight.format :only [get-normalized-format]]
+  (:use [rinzelight.format :only [get-normalized-format]]
         [rinzelight.pixel  :only [create-pixel
                                   pixel-to-int-array]])  
   (:import (java.awt Color)

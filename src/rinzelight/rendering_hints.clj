@@ -1,5 +1,4 @@
 (ns rinzelight.rendering-hints
-  (:use [clojure.contrib.def :only [defmacro-]])
   (:import (java.awt RenderingHints)))
 
 (defn create-rendering-hint

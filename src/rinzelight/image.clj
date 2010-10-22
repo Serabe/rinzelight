@@ -1,6 +1,5 @@
 (ns rinzelight.image
-  (:use [clojure.contrib.str-utils2 :only [split]]
-        [rinzelight.buffered-image :only [write-buffered-image
+  (:use [rinzelight.buffered-image :only [write-buffered-image
                                           create-new-canvas-for-image]]
         [rinzelight.format :only [get-normalized-format]]
         [rinzelight.display-image :only [display-fn]]) 
