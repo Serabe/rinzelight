@@ -6,7 +6,6 @@
         [rinzelight.pixel
          :only [pixel-round-to-quantum]]))
 
-; TODO Add testing
 (defn complete-multisample
   [factor default]
   (if (number? factor)
