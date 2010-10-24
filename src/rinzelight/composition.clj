@@ -1,8 +1,7 @@
 (ns rinzelight.composition
   (:use [rinzelight.image
          :only [clone-image]])
-  (:import (java.awt AlphaComposite))
-  )
+  (:import (java.awt AlphaComposite)))
 
 (defmacro porter-duff-rule
   "Defines a composite. A composite accepts an optional parameter. If given, it is the factor to multiply the alpha of the source."
@@ -65,7 +64,7 @@ If x,y aren't given, 0,0 is assumed.
 If comp is not given, src-over is assumed.
 If instead of two coordinates, one is supplied, it is assumed it is a geometry.
 Returns a new image."
-  ([dst src] (composite src dst (src-over) 0 0))
+  ([dst src] (composite dst src (src-over) 0 0))
   ([dst src comp-or-geom]
      (if (composite? comp-or-geom)
        (composite dst src comp-or-geom 0 0)
