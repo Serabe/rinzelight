@@ -35,8 +35,13 @@
 
 (defn map-pixel-location
   "Calls f for each pixel location and returns another location.
-   f must acccept two parameters [x, y] and return another vector with the new coordinates."
+f must acccept two parameters [x, y] and return another vector with the new coordinates.
+new_size_f is a function that is applied to img to get the new size.
+nw and nh are new width and new height respectively."
   ([f img] (map-pixel-location f img (:width img) (:height img)))
+  ([f new_size_f img]
+     (let [[nw nh] (new_size_f img)]
+       (map-pixel-location f img nw nh)))
   ([f img nw nh]
      (let [w (:width img)
            h (:height img)
