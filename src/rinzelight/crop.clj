@@ -3,7 +3,7 @@
          :only [create-image]]
         [rinzelight.composition
          :only [src-over
-                with-composite]])
+                compose]])
   (:import (java.awt AlphaComposite)))
 
 (defn crop
