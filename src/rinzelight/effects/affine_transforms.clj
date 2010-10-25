@@ -12,11 +12,13 @@
 it is convenient to set this to true in order to resize the new image."}
  *is-a-resize-safe-transform* false)
 
+; TODO: test edge cases
 (defn concat-transforms
   "Concatenates all transformations."
   [& transforms]
   (reduce (fn [a b] (doto a (.concatenate b))) (AffineTransform.) transforms))
 
+; TODO: test edge cases.
 (defn preconcat-transforms
   "Preconcatenates all transformations"
   [& transforms]
@@ -63,49 +65,74 @@ Second and third (optional) are the center of rotation."
 they are considered as the center of rotation. The other vs must be rendering
 hints."
   [img theta & vs]
-  (let [args (vec vs)]
-    (if (and (>= 2 (count args))
-             (number? (first args))
-             (number? (second args)))
-      (let [cx (first args)
-            cy (second args)
-            rhs (drop 2 args)]
-        (apply apply-transform img (rotate-transform theta cx cy) rhs))
-      (apply apply-transform img (rotate-transform theta) args))))
+  (if (and (number? (nth vs 0))
+           (number? (nth vs 1)))
+    (let [cx (nth vs 0)
+          cy (nth vs 1)
+          rhs (drop 2 vs)]
+      (apply apply-transform img (rotate-transform theta cx cy) rhs))
+    (apply apply-transform img (rotate-transform theta) vs)))
 
 (defmacro scale-transform
   "Returns a transformation object for scaling."
-  [scale-x scale-y]
-  `(AffineTransform/getScaleInstance ~scale-x ~scale-y))
+  ([scale-v]
+     `(scale-transform ~scale-v ~scale-v))
+  ([scale-x scale-y]
+     `(AffineTransform/getScaleInstance ~scale-x ~scale-y)))
 
 (defn scale
   "Scales an image img."
-  [img scale-x scale-y & rhs]
-  (binding [*is-a-resize-safe-transform* true]
-    (apply apply-transform img (scale-transform scale-x scale-y) rhs)))
+  [img scale-x & opt-rhs]
+  (let [with-scale-y (number? (first opt-rhs))
+        scale-y (if with-scale-y
+                  (first opt-rhs)
+                  scale-x)
+        rhs (if with-scale-y
+              (rest opt-rhs)
+              opt-rhs)]
+    (binding [*is-a-resize-safe-transform* true]
+      (apply apply-transform img (scale-transform scale-x scale-y) rhs))))
 
 (defmacro shear-transform
   "Returns a transformation object for shearing."
-  [shear-x shear-y]
-  `(AffineTransform/getShearInstance ~shear-x ~shear-y))
+  ([shear-v]
+     `(shear-transform ~shear-v ~shear-v))
+  ([shear-x shear-y]
+     `(AffineTransform/getShearInstance ~shear-x ~shear-y)))
 
 (defn shear
   "Shears an image img."
-  [img shear-x shear-y & rhs]
-  (binding [*is-a-resize-safe-transform* true]
-    (apply apply-transform img (shear-transform shear-x shear-y) rhs)))
+  [img shear-x & opt-rhs]
+  (let [with-y (number? (first opt-rhs))
+        shear-y (if with-y
+                  (first opt-rhs)
+                  shear-x)
+        rhs     (if with-y
+                  (rest opt-rhs)
+                  opt-rhs)]
+    (binding [*is-a-resize-safe-transform* true]
+      (apply apply-transform img (shear-transform shear-x shear-y) rhs))))
 
 (defmacro translate-transform
   "Returns a transformation objet for translating."
-  [translation-x translation-y]
-  `(AffineTransform/getTranslateInstance ~translation-x
-                                         ~translation-y))
+  ([translation-v]
+     `(translate-transform ~translation-v))
+  ([translation-x translation-y]
+     `(AffineTransform/getTranslateInstance ~translation-x
+                                            ~translation-y)))
 
 (defn translate
   "Translates an image."
-  [img translation-x translation-y & rhs]
-  (apply apply-transform
-         img
-         (translate-transform translation-x
-                              translation-y)
-         rhs))
+  [img translation-x & opt-rhs]
+  (let [with-y (number? (first opt-rhs))
+        translation-y (if with-y
+                        (first opt-rhs)
+                        translation-x)
+        rhs (if with-y
+              (rest opt-rhs)
+              opt-rhs)]
+    (apply apply-transform
+           img
+           (translate-transform translation-x
+                                translation-y)
+           rhs)))
