@@ -60,3 +60,4 @@
 (geometry-example south-west)
 (geometry-example west)
 (geometry-example north-west)
+(geometry-example center)
