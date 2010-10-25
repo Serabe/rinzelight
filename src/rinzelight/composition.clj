@@ -42,36 +42,35 @@ Body executes inside a doto bounded to a Graphics2D object."
   "Sets the composite of the dest to comp, and restores original composite value after executing the body.
 Body executes inside a doto bounded to a Graphics2D object."
   [img comp & body]
-  (let [eval-comp comp]
-    `(let [ni# (clone-image ~img)
-           g2# ^Graphics2D (.. (:image ni#) getGraphics)
-           orig-comp# (.. g2# getComposite)]
-       (doto g2#
-         (.setComposite ~eval-comp)
-         ~@body
-         (.dispose)
-         (.setComposite orig-comp#))
-       ni#)))
+  `(let [ni# (clone-image ~img)
+         g2# ^Graphics2D (.. (:image ni#) getGraphics)
+         orig-comp# (.. g2# getComposite)]
+     (doto g2#
+       (.setComposite ~comp)
+       ~@body
+       (.dispose)
+       (.setComposite orig-comp#))
+     ni#))
 
 (defn composite?
   [o]
   (contains? (ancestors (class o))
              java.awt.Composite))
 
-(defn composite
+(defn compose
   "Composes src over dst at pixel x,y using comp Composite.
 If x,y aren't given, 0,0 is assumed.
 If comp is not given, src-over is assumed.
 If instead of two coordinates, one is supplied, it is assumed it is a geometry.
 Returns a new image."
-  ([dst src] (composite dst src (src-over) 0 0))
+  ([dst src] (compose dst src (src-over) 0 0))
   ([dst src comp-or-geom]
      (if (composite? comp-or-geom)
-       (composite dst src comp-or-geom 0 0)
-       (composite dst src (src-over) comp-or-geom)))
+       (compose dst src comp-or-geom 0 0)
+       (compose dst src (src-over) comp-or-geom)))
   ([dst src comp geom]
      (let [coord (geom dst src)]
-       (composite dst src comp (coord 0) (coord 1))))
+       (compose dst src comp (coord 0) (coord 1))))
   ([dst src comp x y]
      (with-composite dst comp
        (.drawImage (:image src) nil x y))))
