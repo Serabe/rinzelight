@@ -2,11 +2,7 @@
   (:use [rinzelight.image
          :only [read-image
                 write-image]]
-        [rinzelight.effects.affine-transforms
-         :only [rotate
-                scale
-                shear
-                translate]]
+        [rinzelight.effects.affine-transforms]
         [rinzelight.rendering-hints]))
 
 (def img (read-image "samples/northern-lights.jpg"))
@@ -49,3 +45,20 @@
 (at-example
  translate-two-parameters
  (translate 25 50 rendering-quality))
+
+(def cx (/ (:width img) 2))
+(def cy (/ (:height img) 2))
+
+(at-example
+ concat
+ (apply-transform (concat-transforms
+                   (rotate-transform (/ Math/PI 3) cx cy)
+                   (translate-transform 40 20))
+                  rendering-quality))
+
+(at-example
+ preconcat
+ (apply-transform (preconcat-transforms
+                   (rotate-transform (/ Math/PI 3) cx cy)
+                   (translate-transform 40 20))
+                  rendering-quality))
