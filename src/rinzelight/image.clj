@@ -11,15 +11,6 @@
 
 (defstruct image :image :format :width :height)
 
-(comment
-  (defn display-image
-    "Display an image"
-    [img]
-    (let [runnable #(display-fn img)]
-      (if (SwingUtilities/isEventDispatchThread)
-        (.run runnable)
-        (SwingUtilities/invokeAndWait runnable)))))
-
 (defn- assure-argb
   [img]
   (let [nbi (BufferedImage. (.getWidth  img)
