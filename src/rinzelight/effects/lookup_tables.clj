@@ -53,7 +53,7 @@
         (aset g x (short (:green p)))
         (aset b x (short (:blue  p)))
         (aset a x (short (:alpha p)))))
-    (into-array [r g b a])))
+    (multisample-lookup-table r g b a)))
 
 (defn apply-lookup-table
   "Applies lookup table t to img."
