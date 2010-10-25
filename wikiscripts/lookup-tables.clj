@@ -1,4 +1,4 @@
-(ns examples.only-green-lookup-tables
+(ns wikiscripts.lookup-tables
   (:use rinzelight.image
         rinzelight.effects.lookup-tables
         rinzelight.rendering-hints))
