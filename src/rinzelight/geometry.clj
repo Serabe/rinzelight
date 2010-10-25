@@ -25,6 +25,11 @@ Actually, any function with two parameters returning a two-long int vector would
      [((~geo-x dw# dh# sw# sh#) 0)
       ((~geo-y dw# dh# sw# sh#) 1)]))
 
+(defgeometry center
+  [dw dh sw sh]
+  [(/ (- dw sw) 2)
+   (/ (- dh sh) 2)])
+
 (defgeometry north
   [dw _ sw _]
   [(int (/ (max 0 (- dw sw)) 2))
