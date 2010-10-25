@@ -1,6 +1,8 @@
 (ns rinzelight.image
-  (:use [rinzelight.buffered-image :only [write-buffered-image
-                                          create-new-canvas-for-image]]
+  (:use [rinzelight.buffered-image
+         :only [write-buffered-image
+                create-new-canvas-for-image
+                create-empty-canvas]]
         [rinzelight.format :only [get-normalized-format]]
         [rinzelight.display-image :only [display-fn]]) 
   (:import (java.awt Color)
@@ -33,7 +35,9 @@
   (display-fn img))
 
 (defmulti create-image
-  "Creates a new image from BufferedImage or ImageReader" class)
+  "Creates a new image from BufferedImage or ImageReader"
+  (fn [x & xs]
+    (class x)))
 
 (defmethod create-image BufferedImage
   [buf-img]
@@ -46,6 +50,12 @@
         width (.getWidth img)
         height (.getHeight img)]
     (struct image img frmt width height)))
+
+(defmethod create-image :default
+  ([width height]
+     (create-image (create-empty-canvas width height)))
+  ([width height color]
+     (create-image (create-empty-canvas width height color))))
 
 (defmulti write-image
   "Write an image. It is a multimethod because of problems when writing jpg"
