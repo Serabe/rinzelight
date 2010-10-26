@@ -27,8 +27,8 @@ Actually, any function with two and four parameters returning a two-long int vec
 
 (defgravity center
   [dw dh sw sh]
-  [(/ (- dw sw) 2)
-   (/ (- dh sh) 2)])
+  [(int (/ (max 0 (- dw sw)) 2))
+   (int (/ (max 0 (- dh sh)) 2))])
 
 (defgravity north
   [dw _ sw _]
