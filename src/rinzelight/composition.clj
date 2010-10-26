@@ -61,15 +61,15 @@ Body executes inside a doto bounded to a Graphics2D object."
   "Composes src over dst at pixel x,y using comp Composite.
 If x,y aren't given, 0,0 is assumed.
 If comp is not given, src-over is assumed.
-If instead of two coordinates, one is supplied, it is assumed it is a geometry.
+If instead of two coordinates, one is supplied, it is assumed it is a gravity.
 Returns a new image."
   ([dst src] (compose dst src (src-over) 0 0))
-  ([dst src comp-or-geom]
-     (if (composite? comp-or-geom)
-       (compose dst src comp-or-geom 0 0)
-       (compose dst src (src-over) comp-or-geom)))
-  ([dst src comp geom]
-     (let [coord (geom dst src)]
+  ([dst src comp-or-grav]
+     (if (composite? comp-or-grav)
+       (compose dst src comp-or-grav 0 0)
+       (compose dst src (src-over) comp-or-grav)))
+  ([dst src comp grav]
+     (let [coord (grav dst src)]
        (compose dst src comp (coord 0) (coord 1))))
   ([dst src comp x y]
      (with-composite dst comp
