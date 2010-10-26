@@ -1,7 +1,7 @@
 (ns wikiscripts.composition
   (:use rinzelight.image
         rinzelight.composition
-        rinzelight.geometry
+        rinzelight.gravity
         rinzelight.rendering-hints))
 
 (def nl (read-image "samples/northern-lights.jpg"))
@@ -32,7 +32,7 @@
 
 (defmacro geometry-example
   [geom]
-  (let [out-file (str "out/geom-" geom ".png")]
+  (let [out-file (str "out/grav-" geom ".png")]
     `(write-image (compose ~'nl
                            ~'src-img
                            (src-over)

@@ -3,7 +3,7 @@
          :only [read-image
                 write-image]]
         [rinzelight.crop]
-        [rinzelight.geometry
+        [rinzelight.gravity
          :only [center]]))
 
 (def img (read-image "samples/northern-lights.jpg"))
@@ -14,6 +14,6 @@
     `(write-image (crop ~'img ~@args)
                   ~out-file)))
 
-(crop-ex with-geom 100 50 center)
+(crop-ex with-grav 100 50 center)
 (crop-ex exceeding-boundaries 100 60 150 130)
 (crop-ex do-not-do-this 100 50 100 50)
