@@ -20,12 +20,12 @@ Actually, any function with two and four parameters returning a two-long int vec
 (defmacro compose-gravities
   "Returns a gravity named name whose x coordinate is calculated by grv-x and y coordinate by grv-y"
   [name grv-x grv-y]
-  `(defgeometry
+  `(defgravity
      ~name [dw# dh# sw# sh#]
      [((~grv-x dw# dh# sw# sh#) 0)
       ((~grv-y dw# dh# sw# sh#) 1)]))
 
-(defgeometry center
+(defgravity center
   [dw dh sw sh]
   [(/ (- dw sw) 2)
    (/ (- dh sh) 2)])
