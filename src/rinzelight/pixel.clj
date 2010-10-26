@@ -25,14 +25,14 @@
       (aset 2 (:blue  p))
       (aset 3 (- 255 (:alpha p))))))
 
-(defn pixel-round-to-quantum
+(defn round-to-quantum
   "Assures that a value is between 0 and rl-quantum-value"
   [value]
   (max 0 (min (quantum-range) value)))
 
 (defn invert-sample-value
   [val]
-  (- (quantum-range) (pixel-round-to-quantum val)))
+  (- (quantum-range) (round-to-quantum val)))
 
 (defn invert-pixel
   "Returns an inverted pixel."

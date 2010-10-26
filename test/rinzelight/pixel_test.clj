@@ -52,19 +52,19 @@
     (fact "Four element should equal alpha."
           (aget arr 3) => actual-alpha)))
 
-(deftest pixel-round-to-quantum-facts
+(deftest round-to-quantum-facts
 
   (fact "Less than zero, returns zero"
-        (pixel-round-to-quantum -5) => 0)
+        (round-to-quantum -5) => 0)
 
   (doseq [v (range (inc (quantum-range)))]
     (let [s (str "If " v " is passed, it returns " v ".")])
     (fact ;s ; But if s is used, somehow it fails...
-     (pixel-round-to-quantum v) => v))
+     (round-to-quantum v) => v))
   
   (fact "Greater than rl-quantum-range, returns rl-quantum-range"
-        (pixel-round-to-quantum (inc (quantum-range))) => (quantum-range)
-        (pixel-round-to-quantum (* 2 (quantum-range))) => (quantum-range))
+        (round-to-quantum (inc (quantum-range))) => (quantum-range)
+        (round-to-quantum (* 2 (quantum-range))) => (quantum-range))
 
 
 

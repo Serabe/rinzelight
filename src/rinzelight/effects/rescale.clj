@@ -4,7 +4,7 @@
                 multisample-lookup-table
                 apply-lookup-table]]
         [rinzelight.pixel
-         :only [pixel-round-to-quantum]]))
+         :only [round-to-quantum]]))
 
 (defn complete-multisample
   [factor default]
@@ -24,7 +24,7 @@
         os (complete-multisample offset 0)]
     (apply multisample-lookup-table
            (map (fn [f o]
-                  (lookup-table-from (fn [x] (pixel-round-to-quantum (+ o (* f x))))))
+                  (lookup-table-from (fn [x] (round-to-quantum (+ o (* f x))))))
                 fs
                 os))))
 
