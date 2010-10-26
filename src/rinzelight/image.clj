@@ -41,7 +41,7 @@
 
 (defmethod create-image BufferedImage
   [buf-img]
-  (struct image (assure-argb buf-img) "JPEG" (.getWidth buf-img) (.getHeight buf-img))) ; TODO: Check the sizes.
+  (struct image (assure-argb buf-img) "JPEG" (.getWidth buf-img) (.getHeight buf-img)))
 
 (defmethod create-image ImageReader
   [reader]
@@ -67,7 +67,11 @@
 
 (defmethod write-image :default
   [img uri]
-  (write-buffered-image (:image img) uri))
+  (try
+    (write-buffered-image (:image img) uri)
+    true
+    (catch Exception e
+      false)))
 
 (defmulti read-image
   "Reads an image from different resources. Look at ImageIO.createImageInputStream for more info"
