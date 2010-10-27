@@ -1,6 +1,6 @@
-(ns rinzelight.effects.convolve-op
+(ns rinzelight.effects.convolve.ops
   (:use [rinzelight.image]
-        [rinzelight.effects.convolve])
+        [rinzelight.effects.convolve.kernel])
   (:import (java.awt Graphics2D)
            (java.awt.image BufferedImage)))
 
@@ -29,7 +29,6 @@
                    x# y#
                    w# h#)))
 
-
 (defmacro convolve-op
   "Creates a new convolve-op. A convolve-op is just a function that prepares the image to be convolve by the kernel. For that, it creates an expanded image.
 name is the name of the convolve-op.
@@ -55,18 +54,19 @@ Inside body, two functions are available:
          ~@body
          ni#))))
 
-(convolve-op edge-no-op
-             [img kern]
-             (let [[w h]     (helper-image-size img kern)
-                   [ix iy]   (orig-img-starting-pixel kern)
-                   clr java.awt.Color/BLACK
-                   hor-black (:image (create-image w iy clr))
-                   ver-black (:image (create-image ix (:height img) clr))]
-               (get-from-image 0 0 (:width img) 1)
-               (set-to-new-image hor-black 0 0)
-               (set-to-new-image hor-black 0 (inc (- h iy)))
-               (set-to-new-image ver-black 0 iy)
-               (set-to-new-image ver-black (inc (- w ix)) iy)))
+(convolve-op
+ zero-fill-op
+ [img kern]
+ (let [[w h]     (helper-image-size img kern)
+       [ix iy]   (orig-img-starting-pixel kern)
+       clr java.awt.Color/BLACK
+       hor-black (:image (create-image w iy clr))
+       ver-black (:image (create-image ix (:height img) clr))]
+   (get-from-image 0 0 (:width img) 1)
+   (set-to-new-image hor-black 0 0)
+   (set-to-new-image hor-black 0 (inc (- h iy)))
+   (set-to-new-image ver-black 0 iy)
+   (set-to-new-image ver-black (inc (- w ix)) iy)))
 
 (convolve-op
  repeat-op

@@ -2,35 +2,31 @@
   "Produces an enhance convolve operator, having more operators "
   (:use [rinzelight.image
          :only [create-image]]
-        [rinzelight.effects.convolve-op])
+        [rinzelight.rendering-hints
+         :only [create-rendering-hint]]
+        [rinzelight.effects.convolve.ops]
+        [rinzelight.effects.convolve.kernel])
   (:import (java.awt Graphics2D))
-  (:import (java.awt.image ConvolveOp
-                           Kernel)))
+  (:import (java.awt.image ConvolveOp)))
 
-;; In order to support more advanced edge ops, an intermediate
-;; image must be used.
-
-(defstruct kernel :kernel :width :height)
-
-(defn to-java-kernel
-  "Retrieves the java representation of the kernel."
-  [kern]
-  (Kernel. (:width kern)
-           (:height kern)
-           (into-array Float/TYPE (:kernel kern))))
-
-(defmacro check-kernel
-  "Checks that both width and height are odd numbers."
-  [kern]
-  (let [checker (fn [w h arr-s]
-                  (and (odd? w) ; width must be odd
-                      (odd? h) ; height must be odd
-                       (= (* w h)
-                          (alength arr-s))))] ; array size must be equal to w*h
-    `(if (isa? (class ~kern) java.awt.image.Kernel)
-       (~checker (.getWidth  ~kern)
-                 (.getHeight ~kern)
-                 (.getKernelData ~kern nil))
-       (~checker (:width  ~kern)
-                 (:height ~kern)
-                 (:kernel ~kern)))))
+(defn convolve
+  "Convolves img using the given kernel and the convolve-op. If there is no convolve-op, zero-fill-op is used.
+If kernel is not valid (see check-kernel), nil is returned."
+  [img kern & opt]
+  (if (check-kernel kern)
+    (let [conv-op (if (map? (first opt))
+                    zero-fill-op
+                    (first opt))
+          rh      (apply create-rendering-hint
+                         (if (map? (first opt))
+                           (rest opt)
+                           opt))
+          [ix iy] (orig-img-starting-pixel kern)
+          ni      (conv-op img kern)
+          res-bi  (.filter (ConvolveOp. (to-java-kernel kern)
+                                        ConvolveOp/EDGE_NO_OP
+                                        rh)
+                           (:image ni) nil)]
+      (create-image (.getSubimage res-bi ix iy
+                                  (:width img) (:height img))))
+    nil))
