@@ -13,17 +13,17 @@
   "Convolves img using the given kernel and the convolve-op. If there is no convolve-op, zero-fill-op is used.
 If kernel is not valid (see check-kernel), nil is returned."
   [img kern & opt]
-  (if (check-kernel kern)
+  (if (valid? kern)
     (let [conv-op (if (map? (first opt))
                     zero-fill-op
                     (first opt))
           rh      (apply create-rendering-hint
                          (if (map? (first opt))
-                           (rest opt)
-                           opt))
+                           opt
+                           (rest opt)))
           [ix iy] (orig-img-starting-pixel kern)
           ni      (conv-op img kern)
-          res-bi  (.filter (ConvolveOp. (to-java-kernel kern)
+          res-bi  (.filter (ConvolveOp. (to-java kern)
                                         ConvolveOp/EDGE_NO_OP
                                         rh)
                            (:image ni) nil)]

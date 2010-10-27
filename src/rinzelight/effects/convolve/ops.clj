@@ -8,13 +8,13 @@
 (defn helper-image-size
   "Retrieves the size of the auxiliar image."
   [img kern]
-  [(+ (:width img) (dec (:width kern)))
-   (+ (:height img) (dec (:height kern)))])
+  [(+ (:width img) (dec (width kern)))
+   (+ (:height img) (dec (height kern)))])
 
 (defn orig-img-starting-pixel
   [kern]
-  [(/ (inc (:width  kern)) 2)
-   (/ (inc (:height kern)) 2)])
+  [(/ (inc (width  kern)) 2)
+   (/ (inc (height kern)) 2)])
 
 (defmacro set-to-image
   [img]
