@@ -11,6 +11,11 @@
                 get-pixels-int-array
                 set-pixels-int-array
                 create-empty-canvas]]
+
+        [rinzelight.constants
+         :only [epsilon
+                quantum-range
+                sq2pi]]
         
         [rinzelight.effects.lookup-tables
          :only [apply-lookup-table
@@ -19,9 +24,34 @@
         [rinzelight.pixel
          :only [create-pixel
                 pixel-to-int-array
-                pixel-round-to-quantum]])
+                round-to-quantum]])
   (:import (java.awt Color)
            (java.awt.image BufferedImage)))
+
+(defn- afok
+  "Auxiliar functon for optimal-kernel-width"
+  [sigma]
+  (let [s2 (* -2 sigma sigma)
+        ssq (* (sq2pi) sigma)]
+    (fn [u]
+      (/ (Math/exp (/ (* u u)
+                      s2))
+         ssq))))
+
+(defn optimal-kernel-width
+  "Given the radius and sigma, returns an optimal kernel width"
+  [radius, sigma]
+  (int (cond
+        (> radius 0.0) (+ 1 (* 2 (Math/ceil radius)))
+        (<= (Math/abs sigma) (epsilon)) 1
+        :else (let [f (afok sigma)]
+                (loop [width 5]
+                  (let [half (int (/ width 2))
+                        r (range (* -1 half) (inc half))
+                        normal (reduce + 0 (map f r))]
+                    (if (<= (* (f half) (quantum-range)) 0)
+                      (- width 2)
+                      (recur (+ 2 width)))))))))
 
 (defn get-image-for-effect
   "Retrieves a new image like img but prepared for writing its pixels"

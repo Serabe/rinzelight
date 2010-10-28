@@ -5,6 +5,7 @@
   (to-java [this]
            "Given a kernel, returns a java.awt.image.Kernel")
   (valid? [this])
+  
   (^floats  kernel [this]
             "Returns an array of floats representing the data")
   (width [this]
@@ -84,7 +85,7 @@
 (defn create-kernel
   "Creates a new kernel. Please, don't use direct maps."
   [width height coll]
-  (struct kernel-struct (into-array Float/TYPE coll)
+  (struct kernel-struct (into-array Float/TYPE (map float coll))
           width height))
 
 (defn- gamma
