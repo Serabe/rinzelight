@@ -56,8 +56,9 @@
   "Given the size of an image and a valid string for either a black or a white point, calculates the number of pixels."
   [size s]
   `(int (* ~size 
-           (Double/parseDouble (.substring ~s 0
-                                           (dec (.length ~s)))))))
+           (/  (Double/parseDouble (.substring ~s 0
+                                               (dec (.length ~s))))
+               100))))
 
 (defn- compute-one-point
   [size point]

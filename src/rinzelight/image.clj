@@ -13,15 +13,23 @@
 
 (defstruct image :image :format :width :height)
 
-(defn- assure-argb
-  [img]
-  (let [nbi (BufferedImage. (.getWidth  img)
-                            (.getHeight img)
-                            BufferedImage/TYPE_INT_ARGB)]
-    (doto (.createGraphics nbi)
-      (.drawImage img 0 0 nil)
-      (.dispose))
-    nbi))
+(defmacro assure-type
+  [t]
+  (let [type (symbol (str "BufferedImage/TYPE_INT_"
+                          (.toUpperCase (str t))))
+        fn-name (symbol (str "assure-" t))]
+    `(defn- ~fn-name
+       [~'img]
+       (let [nbi# (BufferedImage. (.getWidth ~'img)
+                                  (.getHeight ~'img)
+                                  ~type)]
+         (doto (.createGraphics nbi#)
+           (.drawImage ~'img 0 0 nil)
+           (.dispose))
+         nbi#))))
+
+(assure-type argb)
+(assure-type rgb)
 
 (defn clone-image
   "Retrieves a new image structure but with a new image cloned from original."
@@ -57,21 +65,17 @@
   ([width height color]
      (create-image (create-empty-canvas width height color))))
 
-(defmulti write-image
-  "Write an image. It is a multimethod because of problems when writing jpg"
-  #(get-normalized-format %2))
-
-(defmethod write-image "JPEG"
+(defn write-image
+  "Write the image img to uri"
   [img uri]
-  (write-image (create-new-canvas-for-image img) uri))
-
-(defmethod write-image :default
-  [img uri]
-  (try
-    (write-buffered-image (:image img) uri)
-    true
-    (catch Exception e
-      false)))
+  (let [i (if (= "JPEG" (get-normalized-format uri))
+            (assure-rgb (:image img))
+            (:image img))]
+    (try
+      (write-buffered-image i uri)
+      true
+      (catch Exception e
+        false))))
 
 (defmulti read-image
   "Reads an image from different resources. Look at ImageIO.createImageInputStream for more info"

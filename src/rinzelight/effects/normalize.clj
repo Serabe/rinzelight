@@ -5,4 +5,4 @@
 (defmacro normalize
   "Normalizes an image."
   [img & rhs]
-  `(contrast-stretch ~img "0.02%" "0.99%" ~@rhs))
+  `(contrast-stretch ~img "2%" "99%" ~@rhs))
