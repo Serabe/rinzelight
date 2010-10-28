@@ -14,12 +14,11 @@
     `(do
        (defn
          ~fn-name
-         [img# x# y#]
-         (.. ^BufferedImage (:image img#) getRaster (getSample x# y# ~sample-band)))
+         [~'img ~'x ~'y]
+         (.. ^BufferedImage (:image ~'img) getRaster (getSample ~'x ~'y ~sample-band)))
        (alter-meta! #'~fn-name
                     #(assoc %
-                       :doc ~doc-str
-                       :arglists '([img x y]))))))
+                       :doc ~doc-str)))))
 
 (defmacro create-samples-get
   [sample-name sample-band]
@@ -28,13 +27,12 @@
     `(do
        (defn
          ~fn-name
-         ([img# x# y# w# h#] (~fn-name img# x# y# w# h# (int-array (* w# h#))))
-         ([img# x# y# w# h# ^ints arr#]
-             (.. ^BufferedImage (:image img#) getRaster (getSamples x# y# w# h# ~sample-band arr#))))
+         ([~'img ~'x ~'y ~'w ~'h] (~fn-name ~'img ~'x ~'y ~'w ~'h (int-array (* ~'w ~'h))))
+         ([~'img ~'x ~'y ~'w ~'h ^ints ~'arr]
+             (.. ^BufferedImage (:image ~'img) getRaster (getSamples ~'x ~'y ~'w ~'h ~sample-band ~'arr))))
        (alter-meta! #'~fn-name
                     #(assoc %
-                       :doc ~doc-str
-                       :arglists '([img x y width height] [img x y width height array]))))))
+                       :doc ~doc-str)))))
 
 (defmacro create-sample-set
   [sample-name sample-band]
@@ -43,12 +41,11 @@
     `(do
        (defn
          ~fn-name
-         [img# x# y# v#]
-         (.. ^BufferedImage (:image img#) getRaster (setSample x# y# ~sample-band v#)))
+         [~'img ~'x ~'y ~'v]
+         (.. ^BufferedImage (:image ~'img) getRaster (setSample ~'x ~'y ~sample-band ~'v)))
        (alter-meta! #'~fn-name
                     #(assoc %
-                       :doc ~doc-str
-                       :arglists '([img x y v]))))))
+                       :doc ~doc-str)))))
 
 (defmacro create-samples-set
   [sample-name sample-band]
@@ -57,12 +54,11 @@
     `(do
        (defn
          ~fn-name
-         [img# x# y# w# h# ^ints v#]
-         (.. ^BufferedImage (:image img#) getRaster (setSamples x# y# w# h# ~sample-band v#)))
+         [~'img ~'x ~'y ~'w ~'h ^ints ~'v]
+         (.. ^BufferedImage (:image ~'img) getRaster (setSamples ~'x ~'y ~'w ~'h ~sample-band ~'v)))
        (alter-meta! #'~fn-name
                     #(assoc %
-                       :doc ~doc-str
-                       :arglists '([img x y w h v]))))))
+                       :doc ~doc-str)))))
 
 (defmacro create-sample-accessors
   [sample-name sample-band]
