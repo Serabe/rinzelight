@@ -25,4 +25,4 @@
 (cs-example "0.02-0.99" (* 0.02 size) (* 0.99 size))
 (cs-example "2%" "99%")
 (cs-example "20%" "90%")
-(cs-example "0.2-0.9"(* 0.2 size) (* 0.9 size))
+(cs-example "0.2-0.9" (* 0.2 size) (* 0.9 size))

@@ -12,6 +12,7 @@
    (+ (:height img) (dec (height kern)))])
 
 (defn orig-img-starting-pixel
+  "Returns the coordinates where the original image lies."
   [kern]
   [(/ (inc (width  kern)) 2)
    (/ (inc (height kern)) 2)])
@@ -20,14 +21,14 @@
   [img]
   `(fn [data# x# y#]
      (.drawImage ~img data#
-                 nil x# y#)))
+                 nil (int x#) (int y#))))
 
 (defmacro get-from-image
   [img]
   `(fn [x# y# w# h#]
-     (.getSubimage ~img
-                   x# y#
-                   w# h#)))
+     (.getSubimage  ~img
+                    (int x#) (int y#)
+                    (int w#) (int h#))))
 
 (defmacro convolve-op
   "Creates a new convolve-op. A convolve-op is just a function that prepares the image to be convolve by the kernel. For that, it creates an expanded image.
@@ -99,7 +100,7 @@ Inside body, two functions are available:
      (set-to-new-image right (+ right-x x) iy))
 
     ; Create bottom border.
-   (doseq [y (range bot-y w)]
+   (doseq [y (range bot-y h)]
      (doseq [x (range ix)]
        (set-to-new-image bot-left x y)
        (set-to-new-image bot-right (+ right-x x) y))

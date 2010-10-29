@@ -1,4 +1,6 @@
-(ns rinzelight.effects.convolve.kernel)
+(ns rinzelight.effects.convolve.kernel
+  (:use [rinzelight.constants
+         :only [epsilon ]]))
 
 (defprotocol ConvolutionKernel
   "Encapsulates both rinzelight kernel struct and java.awt.image.Kernel"
@@ -91,7 +93,7 @@
 (defn- gamma
   [^floats arr]
   (let [pre-g (areduce arr idx res 0 (+ res (aget arr idx)))]
-    (if (== pre-g 0.0)
+    (if (< pre-g (epsilon))
       (float 1.0)
       (float (/ 1.0 pre-g)))))
 

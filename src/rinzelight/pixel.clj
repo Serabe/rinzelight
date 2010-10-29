@@ -23,7 +23,7 @@
       (aset 0 (:red   p))
       (aset 1 (:green p))
       (aset 2 (:blue  p))
-      (aset 3 (- 255 (:alpha p))))))
+      (aset 3 (:alpha p)))))
 
 (defn round-to-quantum
   "Assures that a value is between 0 and rl-quantum-value"
@@ -48,8 +48,13 @@
 
 (defn invert-pixel
   "Returns an inverted pixel."
-  [p]
-  (create-pixel (invert-sample-value (:red   p))
-                (invert-sample-value (:green p))
-                (invert-sample-value (:blue  p))
-                (:alpha p)))
+  ([p]
+      (create-pixel (invert-sample-value (:red   p))
+                    (invert-sample-value (:green p))
+                    (invert-sample-value (:blue  p))
+                    (:alpha p)))
+  ([r g b a]
+     [(invert-sample-value r)
+      (invert-sample-value g)
+      (invert-sample-value b)
+      a]))

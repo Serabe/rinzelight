@@ -32,7 +32,7 @@
       0
       (let [new-int (+ intensity x)]
         (if (> new-int white-point)
-          idx
+          (inc idx)
           (recur xs new-int (dec idx)))))))
 
 (defn- min-limit
@@ -71,7 +71,7 @@
   [img black white]
   (let [size (* (:width img) (:height img))]
     [(compute-one-point size black)
-     (- size (compute-one-point size white))]))
+     (-  size (compute-one-point size white))]))
 
 (defn contrast-stretch
   "Computes a contrast stretch with whitepoint wp and black point bp."

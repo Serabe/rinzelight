@@ -40,7 +40,6 @@
         g 60
         b 90
         a 99
-        actual-alpha (- 255 a)
         p (create-pixel r g b a)
         arr (pixel-to-int-array p)]
     (fact "First element should equal red."
@@ -50,7 +49,7 @@
     (fact "Third element should equal blue."
           (aget arr 2) => b)
     (fact "Four element should equal alpha."
-          (aget arr 3) => actual-alpha)))
+          (aget arr 3) => a)))
 
 (deftest round-to-quantum-facts
 

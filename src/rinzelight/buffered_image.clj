@@ -114,10 +114,10 @@
   "Returns the pixel (x,y) in img as a pixel struct."
   [img x y]
   (let [a ^ints (get-pixels-int-array img x y)]
-    (create-pixel (aget a 0)
-                  (aget a 1)
-                  (aget a 2)
-                  (- 255 (aget a 3)))))
+    [(aget a 0)
+     (aget a 1)
+     (aget a 2)
+     (aget a 3)]))
 
 (defn set-pixels-int-array
   "Set pixels from pixel x,y to x+width,y+height."
