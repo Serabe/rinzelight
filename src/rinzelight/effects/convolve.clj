@@ -29,6 +29,6 @@ If kernel is not valid (see check-kernel), nil is returned."
                                             ConvolveOp/EDGE_NO_OP
                                             rh)
                                (:image ni) nil)]
-          (create-image (.getSubimage res-bi ix iy
+          (create-image (.getSubimage res-bi (dec ix) (dec iy)
                                       (:width img) (:height img))))
         nil)))

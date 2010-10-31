@@ -1,3 +1,5 @@
 Protocol for images.
 Move documentation-images back inside rinzelight.wiki.
 Move rinzelight.wiki inside rinzelight as a submodule.
+
+Add directional blur.
