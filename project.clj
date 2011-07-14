@@ -3,11 +3,12 @@
   :dependencies [[org.clojure/clojure "1.2.0"]
                  [org.clojure/clojure-contrib "1.2.0"]]
   :dev-dependencies [[lein-clojars "0.6.0"]
-                     [swank-clojure "1.2.1"]
-                     [midje "0.6.1"]
-                     [lein-run "1.0.0"]
-	             [criterium "0.0.1-SNAPSHOT"]
-		     [autodoc "0.7.1"]]
+                     [swank-clojure "1.3.2"]
+                     [midje "1.1.1"]
+                     [lein-run "1.0.1-SNAPSHOT"]
+	             [criterium "0.1.0"]
+		    ;[autodoc "0.7.1"]
+                    ]
   :autodoc {
             :name "Rinzelight"
             :description "A beautiful image processing library for Clojure."
