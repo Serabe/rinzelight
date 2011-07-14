@@ -40,7 +40,8 @@
 (defn display-image
   "Display an image"
   [img]
-  (display-fn img))
+  (when img
+    (display-fn img)))
 
 (defmulti create-image
   "Creates a new image from BufferedImage or ImageReader"
