@@ -17,4 +17,3 @@
             :trim-prefix "rinzelight"
             :page-title "Rinzelight image library"
             :copyright "Copyright 2010 Sergio Arbeo. All rights reserved."})
- 
