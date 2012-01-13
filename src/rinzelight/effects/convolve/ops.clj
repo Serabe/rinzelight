@@ -14,8 +14,8 @@
 (defn orig-img-starting-pixel
   "Returns the coordinates where the original image lies."
   [kern]
-  [(/ (inc (width  kern)) 2)
-   (/ (inc (height kern)) 2)])
+  [(x-orig kern)
+   (y-orig kern)])
 
 (defmacro set-to-image
   [img]
@@ -60,14 +60,16 @@ Inside body, two functions are available:
  [img kern]
  (let [[w h]     (helper-image-size img kern)
        [ix iy]   (orig-img-starting-pixel kern)
-       clr java.awt.Color/BLACK
-       hor-black (:image (create-image w iy clr))
-       ver-black (:image (create-image ix (:height img) clr))]
+       clr java.awt.Color/BLACK]
    (get-from-image 0 0 (:width img) 1)
-   (set-to-new-image hor-black 0 0)
-   (set-to-new-image hor-black 0 (inc (- h iy)))
-   (set-to-new-image ver-black 0 iy)
-   (set-to-new-image ver-black (inc (- w ix)) iy)))
+   (when (> iy 0)
+     (let [hor-black (:image (create-image w iy clr))]
+        (set-to-new-image hor-black 0 0)
+        (set-to-new-image hor-black 0 (- h iy))))
+   (when (> ix 0)
+     (let [ver-black (:image (create-image ix (:height img) clr))]
+        (set-to-new-image ver-black 0 iy)
+        (set-to-new-image ver-black (- w ix) iy)))))
 
 (convolve-op
  repeat-op
