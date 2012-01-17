@@ -90,74 +90,71 @@ nw and nh are new width and new height respectively."
 
 (defn map-image
   "Calls f for each pixel."
-  [f img]
-  (let [w (:width  img)
-        h (:height img)
-        ni (get-image-for-effect img)
-        r (int-array w)
-        g (int-array w)
-        b (int-array w)
-        a (int-array w)]
-    (doseq [y (range h)]
-      (let [r (get-red-samples-int-array   img 0 y w 1 r)
-            g (get-green-samples-int-array img 0 y w 1 g)
-            b (get-blue-samples-int-array  img 0 y w 1 b)
-            a (get-alpha-samples-int-array img 0 y w 1 a)]
-
-        (doseq [x (range w)]
-          (let [np (f (create-pixel (aget r x)
-                                    (aget g x)
-                                    (aget b x)
-                                    (aget a x)))]
-            (aset r x (:red   np))
-            (aset g x (:green np))
-            (aset b x (:blue  np))
-            (aset a x (:alpha np))))
-        (set-red-samples-int-array   ni 0 y w 1 r)
-        (set-green-samples-int-array ni 0 y w 1 g)
-        (set-blue-samples-int-array  ni 0 y w 1 b)
-        (set-alpha-samples-int-array ni 0 y w 1 a)))
-    ni))
-
-(defn map-image2
-  "Calls f for each pixel."
-  [f img0 img1]
-  (let [w (:width  img0)
-        h (:height img0)
-        ni (get-image-for-effect img0)
-        r0 (int-array w)
-        g0 (int-array w)
-        b0 (int-array w)
-        a0 (int-array w)
-        r1 (int-array w)
-        g1 (int-array w)
-        b1 (int-array w)
-        a1 (int-array w)]
-    (doseq [y (range h)]
-      (let [r0 (get-red-samples-int-array   img0 0 y w 1 r0)
-            g0 (get-green-samples-int-array img0 0 y w 1 g0)
-            b0 (get-blue-samples-int-array  img0 0 y w 1 b0)
-            a0 (get-alpha-samples-int-array img0 0 y w 1 a0)
-            r1 (get-red-samples-int-array   img1 0 y w 1 r1)
-            g1 (get-green-samples-int-array img1 0 y w 1 g1)
-            b1 (get-blue-samples-int-array  img1 0 y w 1 b1)
-            a1 (get-alpha-samples-int-array img1 0 y w 1 a1)]
-
-        (doseq [x (range w)]
-          (let [np (f (create-pixel (aget r0 x)
-                                    (aget g0 x)
-                                    (aget b0 x)
-                                    (aget a0 x))
-                      (create-pixel (aget r1 x)
-                                    (aget g1 x)
-                                    (aget b1 x)
-                                    (aget a1 x)))]
-            (aset r0 x (:red   np))
-            (aset g0 x (:green np))
-            (aset b0 x (:blue  np))
-            (aset a0 x (:alpha np))))
-        (set-red-samples-int-array   ni 0 y w 1 r0)
-        (set-green-samples-int-array ni 0 y w 1 g0)
-        (set-blue-samples-int-array  ni 0 y w 1 b0)
-        (set-alpha-samples-int-array ni 0 y w 1 a0)))
-    ni))
+  ([f img]
+    (let [w (:width  img)
+          h (:height img)
+          ni (get-image-for-effect img)
+          r (int-array w)
+          g (int-array w)
+          b (int-array w)
+          a (int-array w)]
+      (doseq [y (range h)]
+        (let [r (get-red-samples-int-array   img 0 y w 1 r)
+              g (get-green-samples-int-array img 0 y w 1 g)
+              b (get-blue-samples-int-array  img 0 y w 1 b)
+              a (get-alpha-samples-int-array img 0 y w 1 a)]
+          
+          (doseq [x (range w)]
+            (let [np (f (create-pixel (aget r x)
+                                      (aget g x)
+                                      (aget b x)
+                                      (aget a x)))]
+              (aset r x (:red   np))
+              (aset g x (:green np))
+              (aset b x (:blue  np))
+              (aset a x (:alpha np))))
+          (set-red-samples-int-array   ni 0 y w 1 r)
+          (set-green-samples-int-array ni 0 y w 1 g)
+          (set-blue-samples-int-array  ni 0 y w 1 b)
+          (set-alpha-samples-int-array ni 0 y w 1 a)))
+      ni))
+  ([f img0 img1]
+    (let [w (:width  img0)
+          h (:height img0)
+          ni (get-image-for-effect img0)
+          r0 (int-array w)
+          g0 (int-array w)
+          b0 (int-array w)
+          a0 (int-array w)
+          r1 (int-array w)
+          g1 (int-array w)
+          b1 (int-array w)
+          a1 (int-array w)]
+      (doseq [y (range h)]
+        (let [r0 (get-red-samples-int-array   img0 0 y w 1 r0)
+              g0 (get-green-samples-int-array img0 0 y w 1 g0)
+              b0 (get-blue-samples-int-array  img0 0 y w 1 b0)
+              a0 (get-alpha-samples-int-array img0 0 y w 1 a0)
+              r1 (get-red-samples-int-array   img1 0 y w 1 r1)
+              g1 (get-green-samples-int-array img1 0 y w 1 g1)
+              b1 (get-blue-samples-int-array  img1 0 y w 1 b1)
+              a1 (get-alpha-samples-int-array img1 0 y w 1 a1)]
+          
+          (doseq [x (range w)]
+            (let [np (f (create-pixel (aget r0 x)
+                                      (aget g0 x)
+                                      (aget b0 x)
+                                      (aget a0 x))
+                        (create-pixel (aget r1 x)
+                                      (aget g1 x)
+                                      (aget b1 x)
+                                      (aget a1 x)))]
+              (aset r0 x (:red   np))
+              (aset g0 x (:green np))
+              (aset b0 x (:blue  np))
+              (aset a0 x (:alpha np))))
+          (set-red-samples-int-array   ni 0 y w 1 r0)
+          (set-green-samples-int-array ni 0 y w 1 g0)
+          (set-blue-samples-int-array  ni 0 y w 1 b0)
+          (set-alpha-samples-int-array ni 0 y w 1 a0)))
+      ni)))
